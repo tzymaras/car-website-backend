@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" remoteFilesAllowedToDisappearOnAutoupload="false">
+    <serverData>
+      <paths name="comtech">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$/eureka" web="/" />
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="fischer">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$/eureka" web="/" />
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="globus">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$/eureka" web="/" />
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="globus_stage">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$/eureka" web="/" />
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="icinga">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$/eureka" web="/" />
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="internetstores">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$/eureka" web="/" />
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="intersport">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$/eureka" web="/" />
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="kajs">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$/eureka" web="/" />
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="vfb">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$/eureka" web="/" />
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>
