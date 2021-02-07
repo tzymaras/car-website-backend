@@ -2,6 +2,7 @@ package com.udacity.vehicles.domain.manufacturer;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.validation.constraints.*;
 
 /**
  * Declares class to hold car manufacturer information.
@@ -10,7 +11,10 @@ import javax.persistence.Id;
 public class Manufacturer {
 
     @Id
+    @NotNull
     private Integer code;
+
+    @NotBlank
     private String name;
 
     public Manufacturer() { }

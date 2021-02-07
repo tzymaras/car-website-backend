@@ -1,9 +1,10 @@
 package com.udacity.vehicles.service;
 
-import com.udacity.vehicles.domain.car.Car;
-import com.udacity.vehicles.domain.car.CarRepository;
-import java.util.List;
+import com.udacity.vehicles.domain.car.*;
+import org.modelmapper.*;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Implements the car service create, read, update or delete
@@ -15,16 +16,20 @@ public class CarService {
 
     private final CarRepository repository;
 
-    public CarService(CarRepository repository) {
+    private final ModelMapper modelMapper;
+
+    public CarService(CarRepository repository, ModelMapper modelMapper) {
         /**
          * TODO: Add the Maps and Pricing Web Clients you create
          *   in `VehiclesApiApplication` as arguments and set them here.
          */
         this.repository = repository;
+        this.modelMapper = modelMapper;
     }
 
     /**
      * Gathers a list of all vehicles
+     *
      * @return a list of all vehicles in the CarRepository
      */
     public List<Car> list() {
@@ -33,6 +38,7 @@ public class CarService {
 
     /**
      * Gets car information by ID (or throws exception if non-existent)
+     *
      * @param id the ID number of the car to gather information on
      * @return the requested car's information, including location and price
      */
@@ -68,6 +74,7 @@ public class CarService {
 
     /**
      * Either creates or updates a vehicle, based on prior existence of car
+     *
      * @param car A car object, which can be either new or existing
      * @return the new/updated car is stored in the repository
      */
@@ -75,8 +82,10 @@ public class CarService {
         if (car.getId() != null) {
             return repository.findById(car.getId())
                     .map(carToBeUpdated -> {
-                        carToBeUpdated.setDetails(car.getDetails());
-                        carToBeUpdated.setLocation(car.getLocation());
+                        this.modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
+                        this.modelMapper.map(car.getDetails(), carToBeUpdated.getDetails());
+                        this.modelMapper.map(car.getLocation(), carToBeUpdated.getLocation());
+                        this.modelMapper.map(car, carToBeUpdated);
                         return repository.save(carToBeUpdated);
                     }).orElseThrow(CarNotFoundException::new);
         }
@@ -86,19 +95,15 @@ public class CarService {
 
     /**
      * Deletes a given car by ID
+     *
      * @param id the ID number of the car to delete
      */
     public void delete(Long id) {
-        /**
-         * TODO: Find the car by ID from the `repository` if it exists.
-         *   If it does not exist, throw a CarNotFoundException
-         */
-
-
-        /**
-         * TODO: Delete the car from the repository.
-         */
-
-
+        this.repository
+                .findById(id)
+                .ifPresentOrElse(
+                        car -> this.repository.deleteById(id),
+                        CarNotFoundException::new
+                );
     }
 }

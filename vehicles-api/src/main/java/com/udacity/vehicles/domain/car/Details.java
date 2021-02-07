@@ -1,8 +1,9 @@
 package com.udacity.vehicles.domain.car;
 
 import com.udacity.vehicles.domain.manufacturer.Manufacturer;
-import javax.persistence.Embeddable;
-import javax.persistence.ManyToOne;
+
+import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -19,8 +20,8 @@ public class Details {
     @NotBlank
     private String model;
 
-    @NotNull
-    @ManyToOne
+    @Valid
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Manufacturer manufacturer;
 
     private Integer numberOfDoors;
@@ -115,5 +116,21 @@ public class Details {
 
     public void setExternalColor(String externalColor) {
         this.externalColor = externalColor;
+    }
+
+    @Override
+    public String toString() {
+        return "Details{" +
+                "body='" + body + '\'' +
+                ", model='" + model + '\'' +
+                ", manufacturer=" + manufacturer +
+                ", numberOfDoors=" + numberOfDoors +
+                ", fuelType='" + fuelType + '\'' +
+                ", engine='" + engine + '\'' +
+                ", mileage=" + mileage +
+                ", modelYear=" + modelYear +
+                ", productionYear=" + productionYear +
+                ", externalColor='" + externalColor + '\'' +
+                '}';
     }
 }
