@@ -1,5 +1,7 @@
 package com.udacity.vehicles.service;
 
+import com.udacity.vehicles.client.maps.MapsClient;
+import com.udacity.vehicles.client.prices.PriceClient;
 import com.udacity.vehicles.domain.car.*;
 import org.modelmapper.*;
 import org.springframework.stereotype.Service;
@@ -13,18 +15,21 @@ import java.util.List;
  */
 @Service
 public class CarService {
-
     private final CarRepository repository;
-
     private final ModelMapper modelMapper;
+    private final PriceClient pricesWebClient;
+    private final MapsClient mapsWebClient;
 
-    public CarService(CarRepository repository, ModelMapper modelMapper) {
-        /**
-         * TODO: Add the Maps and Pricing Web Clients you create
-         *   in `VehiclesApiApplication` as arguments and set them here.
-         */
+    public CarService(
+            CarRepository repository,
+            ModelMapper modelMapper,
+            PriceClient pricesWebClient,
+            MapsClient mapsWebClient
+    ) {
         this.repository = repository;
         this.modelMapper = modelMapper;
+        this.pricesWebClient = pricesWebClient;
+        this.mapsWebClient = mapsWebClient;
     }
 
     /**
@@ -43,21 +48,8 @@ public class CarService {
      * @return the requested car's information, including location and price
      */
     public Car findById(Long id) {
-        /**
-         * TODO: Find the car by ID from the `repository` if it exists.
-         *   If it does not exist, throw a CarNotFoundException
-         *   Remove the below code as part of your implementation.
-         */
-        Car car = new Car();
-
-        /**
-         * TODO: Use the Pricing Web client you create in `VehiclesApiApplication`
-         *   to get the price based on the `id` input'
-         * TODO: Set the price of the car
-         * Note: The car class file uses @transient, meaning you will need to call
-         *   the pricing service each time to get the price.
-         */
-
+        Car car = this.repository.findById(id).orElseThrow(CarNotFoundException::new);
+        car.setPrice(this.pricesWebClient.getPrice(id));
 
         /**
          * TODO: Use the Maps Web client you create in `VehiclesApiApplication`
