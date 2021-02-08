@@ -21,6 +21,7 @@ public class Details {
     private String model;
 
     @Valid
+    @NotNull
     @ManyToOne(cascade = CascadeType.MERGE)
     private Manufacturer manufacturer;
 

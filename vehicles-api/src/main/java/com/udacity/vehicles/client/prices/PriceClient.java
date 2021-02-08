@@ -5,15 +5,35 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.*;
+
 /**
  * Implements a class to interface with the Pricing Client for price data.
  */
 @Component
 public class PriceClient {
+    private static final int DEFAULT_MAX_ENTRIES = 20;
 
     private static final Logger log = LoggerFactory.getLogger(PriceClient.class);
-
     private final WebClient client;
+    private final Map<Long, String> priceCache = Collections.synchronizedMap(new PriceCache(DEFAULT_MAX_ENTRIES));
+
+    /**
+     * small cache implementation to hold the last 20 requested vehicle prices
+     */
+    private static class PriceCache extends LinkedHashMap<Long, String> {
+        private final int maxEntries;
+
+        public PriceCache(int maxEntries) {
+            super(maxEntries);
+            this.maxEntries = maxEntries;
+        }
+
+        @Override
+        protected boolean removeEldestEntry(Map.Entry eldest) {
+            return this.size() > this.maxEntries;
+        }
+    }
 
     public PriceClient(@Qualifier("pricing") WebClient pricing) {
         this.client = pricing;
@@ -33,13 +53,21 @@ public class PriceClient {
      * service is down.
      */
     public String getPrice(Long vehicleId) {
+        if (this.priceCache.containsKey(vehicleId)) {
+            return this.priceCache.get(vehicleId);
+        }
+
         try {
             Price price = client
                     .get()
                     .uri(uriBuilder -> uriBuilder.path("services/price/" + vehicleId).build())
                     .retrieve().bodyToMono(Price.class).block();
 
-            return String.format("%s %s", price.getCurrency(), price.getPrice());
+            String formattedPrice = String.format("%s %s", price.getCurrency(), price.getPrice());
+
+            this.priceCache.putIfAbsent(vehicleId, formattedPrice);
+
+            return formattedPrice;
         } catch (Exception e) {
             log.error("Unexpected error retrieving price for vehicle {}", vehicleId, e);
         }

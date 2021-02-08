@@ -1,9 +1,10 @@
 package com.udacity.vehicles.api;
 
 import com.udacity.vehicles.domain.car.Car;
-import com.udacity.vehicles.service.CarService;
+import com.udacity.vehicles.service.*;
+import io.swagger.annotations.*;
 import org.springframework.hateoas.*;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -50,6 +51,9 @@ class CarController {
      * @param id the id number of the given vehicle
      * @return all information for the requested vehicle
      */
+    @ApiResponses(value = {
+        @ApiResponse(code = 404, message = CarNotFoundException.CAR_NOT_FOUND_MESSAGE)
+    })
     @GetMapping("/{id}")
     Resource<Car> get(@PathVariable Long id) {
         return assembler.toResource(
@@ -64,6 +68,9 @@ class CarController {
      * @return response that the new vehicle was added to the system
      * @throws URISyntaxException if the request contains invalid fields or syntax
      */
+    @ApiResponses(value = {
+        @ApiResponse(code = 400, message = ManufacturerNotExistsException.NOT_EXISTS_MESSAGE)
+    })
     @PostMapping
     ResponseEntity<?> post(@Valid @RequestBody Car car) throws URISyntaxException {
         Resource<Car> resource = assembler.toResource(
@@ -82,6 +89,10 @@ class CarController {
      * @param car The updated information about the related vehicle.
      * @return response that the vehicle was updated in the system
      */
+    @ApiResponses(value = {
+        @ApiResponse(code = 404, message = CarNotFoundException.CAR_NOT_FOUND_MESSAGE),
+        @ApiResponse(code = 400, message = ManufacturerNotExistsException.NOT_EXISTS_MESSAGE)
+    })
     @PutMapping("/{id}")
     ResponseEntity<?> put(@PathVariable Long id, @Valid @RequestBody Car car) {
         car.setId(id);
@@ -99,6 +110,10 @@ class CarController {
      * @param id The ID number of the vehicle to remove.
      * @return response that the related vehicle is no longer in the system
      */
+    @ApiResponses(value = {
+        @ApiResponse(code = 404, message = CarNotFoundException.CAR_NOT_FOUND_MESSAGE),
+    })
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     ResponseEntity<?> delete(@PathVariable Long id) {
         this.carService.delete(id);
