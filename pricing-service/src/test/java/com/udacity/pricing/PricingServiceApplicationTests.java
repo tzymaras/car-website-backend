@@ -28,7 +28,10 @@ public class PricingServiceApplicationTests {
     private TestRestTemplate restTemplate;
 
     @Test
-    public void contextLoads() {
+    public void contextLoads() { }
+
+    @Test
+    public void validRequestHasResponseOK() {
         ResponseEntity<Price> response = restTemplate.getForEntity(this.getTestUrlForVehicleId(2), Price.class);
         assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
     }
